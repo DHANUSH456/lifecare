@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registration Form</title>
+<link rel="stylesheet" th:href="@{../css/style.css}">
+<link rel="icon" type="image/x-icon" th:href="@{../css/images.png}">
+<style>
+.form-box {
+	top: -70px;
+	height: 680px;
+	width: 450px;
+}
+
+#btn {
+	left: 110px;
+	width: 110px;
+}
+
+.input-group {
+	width: 350px;
+	height: 400px;
+}
+
+.message {
+	color: red;
+}
+
+.label-gov {
+	padding: 20px;
+}
+
+input[type="radio"] {
+	margin: 10px;
+}
+</style>
+</head>
+
+<body>
+	<div class="hero">
+		<div class="form-box">
+			<div class="button-box">
+				<div id="btn"></div>
+				<a th:href="@{/login}"><button type="button" class="toggle-btn">Log
+						In</button></a>
+				<button type="button" class="toggle-btn" onclick="register()">Register</button>
+			</div>
+			<div class="message" th:if="${message != null}">[[${message}]]
+			</div>
+			<form th:action="@{/registration}" method="post" role="form"
+				th:object="${user}" class="input-group">
+				<input type="text" class="input-field" id="name" name="name"
+					pattern="[A-Za-z]{3,}" placeholder="Enter your Name"
+					oninvalid="setCustomValidity('Name should be more than 3 characters and contain only letters')"
+					onchange="try{setCustomValidity('')}catch(e){}" required> 
+				<input
+					type="email" class="input-field" id="email" name="email"
+					pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+					placeholder="Enter your email" required> 
+				<input
+					type="password" class="input-field" id="password" name="password"
+					pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+					title="Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one digit, and one special character (@$!%*?&)"
+					placeholder="Enter your password" required> 
+					
+				<input
+					type="password" class="input-field" id="confirmPassword"
+					name="confirmPassword"
+					pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+					title="Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one digit, and one special character (@$!%*?&)"
+					placeholder="Enter your Confirm password" required> 
+				<input
+					type="tel" class="input-field" id="phoneNumber" name="phoneNumber"
+					pattern="[0-9]{10}" maxlength="10"
+					title="Phone Number Should contain only Digits"
+					placeholder="Enter your Phone Number" required> 
+				<select
+					class="input-field" id="roles" name="roles"
+					onchange="toggleGovernmentUID()" required>
+					<option value="">Select your role</option>
+					<option value="SELLER">SELLER</option>
+					<option value="BUYER">BUYER</option>
+				</select>
+
+				<div id="showgovid">
+					<label class="label-gov" id="govLabel">GovernmentUID</label> <label
+						id="radioLabel"><input type="radio" name="sosCardDetails1"
+						id="sosCardDetails_no" value="false" checked
+						onclick="showTextBox()"> No</label>  <label id="radioLabel2"><input
+						type="radio" name="sosCardDetails1" id="sosCardDetails_yes"
+						value="true" onclick="showTextBox()"> Yes</label>
+					<div id="textBoxDiv" style="display: none;">
+						<input type="text" name="sosCardDetails" id="sosCardDetails"
+							class="input-field" placeholder="Enter your governmentUID">
+					</div>
+				</div>
+				<button type="submit" class="submit-btn">Register</button>
+			</form>
+		</div>
+	</div>
+	<script>
+		var y = document.getElementById("btn");
+		var role = document.getElementById("roles").value;
+		var textBoxDiv = document.getElementById("textBoxDiv");
+		var yesRadio = document.getElementById("sosCardDetails_yes");
+		var showgovid = document.getElementById("showgovid");
+		showgovid.style.display = "none";
+
+		function register() {
+			y.style.left = "50px";
+		}
+
+		function showTextBox() {
+			if (yesRadio.checked) {
+				textBoxDiv.style.display = "block";
+			} else {
+				textBoxDiv.style.display = "none";
+			}
+		}
+
+		document.getElementById("roles").addEventListener("change", function() {
+			var selectedRole = this.value;
+			if (selectedRole === "BUYER") {
+				showgovid.style.display = "block";
+			} else {
+				showgovid.style.display = "none";
+			}
+		});
+	</script>
+</body>
+
+</html>
